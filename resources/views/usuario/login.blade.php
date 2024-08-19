@@ -63,6 +63,7 @@
             <button type="submit" class="btn btn-primary w-100">Ingresar</button>
           </div>
           <!-- /.col -->
+          <p>si no tienes cuenta hazlo haciendo <br> <a href="{{ route('usuario.registrar')}}" class="btn btn-primary">Click Aqui</a>
         </div>
       </form>
 
@@ -73,7 +74,7 @@
     <!-- /.card-body -->
   </div>
   <!-- /.card -->
-  <p>si no tienes cuenta hazlo haciendo  <a href="{{ route('usuario.registrar')}}" class="btn btn-primary">Click Aqui</a>
+ 
 </div>
 <!-- /.login-box -->
 

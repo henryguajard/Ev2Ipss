@@ -21,42 +21,47 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link" href="/proyectos">Proyectos</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/crearProyect">Crear proyecto</a>
+                <a class="nav-link" href="/backoffice.proyecto">Crear proyecto</a>
             </li>
            
         </ul>
     </div>
 </nav>
-    
-   
-    <div><h2>datos del usuario</h2></div>
+ <div class="container mt-4"> 
+    <div class="row">
+        <div class="col-12">
+            <h2>Datos del Usuario</h2>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Campo</th>
+                        <th>Valor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Nombre</td>
+                        <td>{{ $user->nombre }}</td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td>{{ $user->email }}</td>
+                    </tr>
+                    <tr>
+                        <td>Estado</td>
+                        <td>{{ $user->activo ? 'Activo' : 'Inactivo' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+          
 
-    <table border="1" cellpadding="10" cellspacing="0">
-        <thead>
-            <tr>
-                <th>Campo</th>
-                <th>Valor</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Nombre</td>
-                <td>{{ $user->nombre }}</td>
-            </tr>
-            <tr>
-                <td>Email</td>
-                <td>{{ $user->email }}</td>
-            </tr>
-            <tr>
-                <td>Estado</td>
-                <td>{{ $user->activo ? 'Activo' : 'Inactivo' }}</td>
-            </tr>
-        </tbody>
-    </table>
-    
+           
+    </div>
+</div>
+        </div>
+    </div>
+</div>
+
     <!-- Incluir los scripts de Bootstrap -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>

@@ -10,14 +10,12 @@ use Illuminate\Support\Facades\Hash;
 
 class userController extends Controller
 {
-    //
     public function formularioLogin()
     {
-       if(Auth::check()){
-        return redirect()->route('backoffice.dashboard');
-       }
-       return view('usuario.login');
-
+        if(Auth::check()){
+            return redirect()->route('backoffice.dashboard');
+        }
+        return view('usuario.login');
     }
 
     public function formularioNuevo()
@@ -28,78 +26,74 @@ class userController extends Controller
         return view('usuario.create');
     }
 
-    public function login(Request $_request){
-      
+    public function login(Request $_request)
+    {
         $mensajes = [
             'email.required' => 'El email es obligatorio',
             'email.email' => 'El email no tiene un formato valido',
-           'password.required' => 'La contraseña es obligatoria'
+            'password.required' => 'La contraseña es obligatoria'
         ];
 
-        $_request->validate([// validamos que los campos esten ingresados
+        $_request->validate([
             'email' => 'required|email',
             'password' => 'required'
         ], $mensajes);
-        //$mensajes);
 
         $credenciales = $_request->only('email', 'password');
 
         if (Auth::attempt($credenciales)) {
-           // verificar el usuario activo
+            // Verificar si el usuario está activo
             $user = Auth::user();
-            if (!$user->activo){
+            if (!$user->activo) {
                 Auth::logout();
                 return redirect()->route('usuario.login')->withErrors(['email' => 'El usuario se encuentra desactivado.']);
-           }
-           // Autenticacion exitosa
+            }
+            // Autenticación exitosa
             $_request->session()->regenerate();
             return redirect()->route('backoffice.dashboard');
         }
 
-        // echo 'siempre';
         return redirect()->back()->withErrors(['email' => 'El usuario o contraseña son incorrectos']);
-        
     }
 
-    public function registrar(Request $_request){
+    public function registrar(Request $_request)
+    {
         $mensajes = [
             'nombre.required' => 'El nombre es obligatorio',
             'email.required' => 'El email es obligatorio',
             'email.email' => 'El email no tiene un formato valido',
             'password.required' => 'La contraseña es obligatoria',
             'rePassword.required' => 'Repetir contraseña es obligatorio',
-            'dayCode.required' => 'El codigo del dia es obligatorio',
-
+            'dayCode.required' => 'El código del día es obligatorio',
         ];
+
         $_request->validate([
             'nombre' => 'required|string|max:50',
             'email' => 'required|email',
             'password' => 'required|string',
             'rePassword' => 'required|string',
             'dayCode' => 'required|string',
-
         ],  $mensajes);
 
         $datos = $_request->only('nombre', 'email', 'password', 'rePassword', 'dayCode');
 
         if($datos['password'] != $datos['rePassword']){
             return back()->withErrors(['message' => 'Las contraseñas ingresadas no son iguales']);
-    }
+        }
 
-    if ($datos['dayCode'] != date("d")){
-        return back()->withErrors(['message' => 'El codigo del dia no es valido']);
+        if ($datos['dayCode'] != date("d")){
+            return back()->withErrors(['message' => 'El código del día no es válido']);
+        }
+
+        try {
+            User::create([
+                'nombre' => $datos['nombre'],
+                'email' => $datos['email'],
+                'password' => Hash::make($datos['password'])
+            ]);
+            return redirect()->route('usuario.login')->with('success', 'Usuario creado exitosamente');
+        } catch (Exception $e) {
+            return back()->withErrors(['message' => $e->getMessage()]);
+        }
     }
-     
-    try {
-        User::create([
-            'nombre' => $datos['nombre'],
-            'email' => $datos['email'],
-            'password' => Hash::make($datos['password'])
-            
-        ]);
-        return redirect()->route('usuario.login')->with('success', 'Usuario creado exitosamente');
-    } catch (Exception $e) {
-        return back()->withErrors(['message', $e->getMessage()]);
-    }
-}
 }
