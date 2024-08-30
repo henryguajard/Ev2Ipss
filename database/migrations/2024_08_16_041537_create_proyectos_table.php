@@ -17,9 +17,10 @@ return new class extends Migration
             $table->boolean('activo')->default(false);
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->date('fecha_inicio'); // Columna para la fecha de inicio
+            $table->string('responsable'); // Columna para el nombre del responsable
+            $table->unsignedInteger('monto'); // Columna para el monto
             $table->timestamps();
-
-            
         });
     }
 

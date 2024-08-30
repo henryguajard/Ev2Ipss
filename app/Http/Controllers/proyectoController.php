@@ -3,35 +3,34 @@
 namespace App\Http\Controllers;
 
 use App\Models\Proyecto;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-
 class proyectoController extends Controller
 {
-    // Aplicar middleware de autenticación
-  
-
-    // Método para obtener todos los proyectos
     public function index()
     {
-      
-
-        // Obtener todos los proyectos del usuario autenticado
         $user = Auth::user();
-        $proyectos = proyecto::where('responsable', $user->nombre)->get();
-
-        // Asegurarse de que la variable siempre exista
-        $proyectos = $proyectos->isEmpty() ? collect([]) : $proyectos;
-
-        // Retornar la vista con los proyectos y el usuario
-        return view('backoffice.proyecto', compact('proyectos', 'user'));
+        if (!$user) {
+            return redirect()->route('usuario.login')->withErrors(['message' => 'No existe una sesión activa']);
+        }
+    
+        // Obtener proyectos del usuario autenticado
+        $datos = Proyecto::where('user_id', $user->id)->get();
+    
+        // Pasar los datos del usuario a la vista junto con los proyectos
+        return view('backoffice.proyecto', compact('datos', 'user'));
     }
 
-    // Método para crear un nuevo proyecto
     public function store(Request $request)
     {
-        // Validar la solicitud
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('usuario.login')->withErrors(['message' => 'No existe una sesión activa']);
+        }
+
+        // Validar y almacenar el proyecto
         $validatedData = $request->validate([
             'nombre' => 'required|string|max:255',
             'fecha_de_inicio' => 'required|date',
@@ -40,10 +39,14 @@ class proyectoController extends Controller
             'monto' => 'required|numeric',
         ]);
 
-        // Crear el proyecto
-        $proyecto = Proyecto::create($validatedData);
-
-        // Redirigir a la lista de proyectos con un mensaje de éxito
-        return redirect()->route('backoffice.proyecto')->with('success', 'Proyecto creado exitosamente');
+        try {
+            // Agregar el user_id al arreglo de datos
+            $validatedData['user_id'] = $user->id; // Usa el ID del usuario autenticado
+            Proyecto::create($validatedData);
+            return redirect()->route('backoffice.dashboard')->with('success', 'Proyecto creado con éxito');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'Error al crear el proyecto: ' . $e->getMessage());
+        }
     }
 }
+

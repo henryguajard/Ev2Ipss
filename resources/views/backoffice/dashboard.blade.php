@@ -23,7 +23,13 @@
             <li class="nav-item">
                 <a class="nav-link" href="/backoffice.proyecto">Crear proyecto</a>
             </li>
-           
+            <!-- Enlace para cerrar sesión -->
+            <li class="nav-item">
+                <form action="{{ route('usuario.logout') }}" method="POST" style="display:inline;">
+                    @csrf
+                    <button type="submit" class="nav-link btn btn-link" style="padding: 0;">Cerrar sesión</button>
+                </form>
+            </li>
         </ul>
     </div>
 </nav>
