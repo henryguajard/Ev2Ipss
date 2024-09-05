@@ -26,7 +26,7 @@ class userController extends Controller
         return view('usuario.create');
     }
 
-    public function login(Request $request)
+    public function login(Request $_request)
     {
         $mensajes = [
             'email.required' => 'El email es obligatorio',
@@ -34,12 +34,12 @@ class userController extends Controller
             'password.required' => 'La contraseña es obligatoria'
         ];
 
-        $request->validate([
+        $_request->validate([
             'email' => 'required|email',
             'password' => 'required'
         ], $mensajes);
 
-        $credenciales = $request->only('email', 'password');
+        $credenciales = $_request->only('email', 'password');
 
         
     if (Auth::attempt($credenciales)) {
@@ -49,7 +49,7 @@ class userController extends Controller
             return redirect()->route('usuario.login')->withErrors(['email' => 'El usuario se encuentra desactivado.']);
         }
         // Autenticación exitosa
-        $request->session()->regenerate(); // Regenera la sesión
+        $_request->session()->regenerate(); // Regenera la sesión
         return redirect()->route('backoffice.dashboard');
     }
 
@@ -58,7 +58,7 @@ class userController extends Controller
 
 
 
-    public function registrar(Request $request)
+    public function registrar(Request $_request)
     {
         $mensajes = [
             'nombre.required' => 'El nombre es obligatorio',
@@ -70,7 +70,7 @@ class userController extends Controller
             'dayCode.required' => 'El código del día es obligatorio',
         ];
 
-        $request->validate([
+        $_request->validate([
             'nombre' => 'required|string|max:50',
             'email' => 'required|email|unique:users',
             'password' => 'required|string',
@@ -78,7 +78,7 @@ class userController extends Controller
             'dayCode' => 'required|string',
         ], $mensajes);
 
-        $datos = $request->only('nombre', 'email', 'password', 'rePassword', 'dayCode');
+        $datos = $_request->only('nombre', 'email', 'password', 'rePassword', 'dayCode');
 
         if ($datos['password'] != $datos['rePassword']) {
             return back()->withErrors(['message' => 'Las contraseñas ingresadas no son iguales']);
@@ -100,11 +100,11 @@ class userController extends Controller
         }
     }
 
-    public function logout(Request $request)
+    public function logout(Request $_request)
     {
         Auth::logout(); // Cerrar sesión
-        $request->session()->invalidate(); // Invalidar la sesión
-        $request->session()->regenerateToken(); // Regenerar el token CSRF
+        $_request->session()->invalidate(); // Invalidar la sesión
+        $_request->session()->regenerateToken(); // Regenerar el token CSRF
 
         return redirect()->route('usuario.login')->with('success', 'Sesión cerrada con éxito');
     }

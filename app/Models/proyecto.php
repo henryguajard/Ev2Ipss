@@ -11,11 +11,11 @@ class proyecto extends Model
 
     protected $fillable =[
       'nombre',
-      'user_id',
-      'fecha_de_inicio',
+      'fecha_inicio',
       'responsable',
       'monto',
       'activo',
+      'user_id',
     ];
 
 }
