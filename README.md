@@ -51,3 +51,7 @@ GET /backoffice.proyecto: Vista para la creación de proyectos
 Migraciones: El sistema utiliza migraciones para gestionar la estructura de la base de datos, incluyendo las tablas para usuarios y proyectos.
 Validaciones: Se asegura que el registro de usuarios sea correcto y que solo los usuarios activos puedan iniciar sesión y crear proyectos.
 - 💡 Bootstrap: La aplicación incluye Bootstrap para el diseño y la maquetación de las vistas del frontend.
+
+- ![index]
+
+<img src=".public/imgs/index.png" alt="index" width="400">
